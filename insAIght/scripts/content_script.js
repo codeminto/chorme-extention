@@ -2,7 +2,7 @@
 let debounceTimer;
 function debouncedDoSomething() {
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(doSomething, 3000);
+    debounceTimer = setTimeout(doSomething, 5000);
 }
 
 function getEmojiForLabel(label) {
@@ -74,6 +74,15 @@ const iconsBelow50 = {
     "violence_graphic": "🔨"
 };
 
+const marketIcons = {
+    "BULLISH\ud83d\udcc8": "📈",
+    "BEARISH\ud83d\udcc9": "📉",
+    "Neutral\ud83d\udd04": "🔁",
+    "Bullish\ud83d\udcc8": "📈",
+    "Bearish\ud83d\udcc9": "📉",
+    "Neutral\ud83d\udd04": "🔁"
+}
+
 // Function to get the appropriate icon based on score
 function getIcon(category, score) {
     if (score > 0.5) {
@@ -143,6 +152,7 @@ function doSomething() {
         const url4 = 'https://content-analysis.onrender.com/vision/llama-3';
         const url5 = 'https://content-analysis.onrender.com/onchain/send-message';
         const url6 = 'https://content-analysis.onrender.com/vision/gpt-4o';
+        const url7 = 'https://ai.privateai.com:11434/get_tweet_sentiment';
 
         // Data for the POST requests
         const data1 = JSON.stringify({ text_inputs: [text] });
@@ -154,6 +164,9 @@ function doSomething() {
         const data4 = JSON.stringify({ content: text });
         const data5 = JSON.stringify({ message: text });
         const data6 = JSON.stringify({ content: sumarize });
+        const data7 = new FormData();
+        data7.append('user_msg', text);
+        // const data7 = JSON.stringify({ user_msg: text })
 
         // Fetch requests
         const fetch1 = fetch(url1, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: data1 });
@@ -162,11 +175,16 @@ function doSomething() {
         const fetch4 = fetch(url4, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: data4 });
         const fetch5 = fetch(url5, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: data5 });
         const fetch6 = fetch(url6, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: data6 });
+        const fetch7 = fetch(url7, { method: 'POST',headers: {
+            'Access-Control-Allow-Origin': "*",
+            "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
+            "Access-Control-Max-Age": "86400",
+          } ,body: data7 });
 
         // Use Promise.all to wait for both fetch requests to complete
-        Promise.all([fetch1, fetch2, fetch3, fetch4, fetch5, fetch6])
+        Promise.all([fetch1, fetch2, fetch3, fetch4, fetch5, fetch6, fetch7])
             .then(responses => Promise.all(responses.map(res => res.json())))
-            .then(([data1, data2, data3, data4, data5, data6]) => {
+            .then(([data1, data2, data3, data4, data5, data6, data7]) => {
                 clearInterval(loadingInterval);
                 document.getElementById('uniqueElementId0').remove();
 
@@ -176,6 +194,7 @@ function doSomething() {
                 console.log('Data from API 4:', data4.content);
                 console.log('Data from API 5:', data5.response);
                 console.log('Data from API 6:', data6.content);
+                console.log('Data from API 7:', data7);
 
                 // Step 1: Create an array with all values
                 const values = [data2.content, data3.content, data4.content, data5.response]
@@ -280,10 +299,12 @@ function doSomething() {
                     innerDiv.className = "group text-xl flex flex-row items-center justify-center rounded-full p-2 transition-colors hover:bg-gray-200 group-hover:bg-gray-200 dark:hover:bg-overlay-medium dark:group-hover:bg-overlay-medium text-action-purple text-faint";
 
                     //const svgIcon = getEmojiForLabel(globalData.moderation.label);
-                    const svgIcon = getIcon(globalData.moderation.label, globalData.moderation.score);
+                    // const svgIcon = getIcon(globalData.moderation.label, globalData.moderation.score);
+                    console.log(data7.openai_response);
+                    const svgIcon = marketIcons[data7.openai_response]
 
                     innerDiv.innerHTML = svgIcon;
-                    innerDiv.title = globalData.moderation.label + ' ' + Math.round(globalData.moderation.score * 100) + '%';
+                    innerDiv.title = 'HugginFace Response: ' + data7.huggingface_response + '\n' + 'HuggingFaceScore: ' + data7.huggingface_score + '\n' + 'OpenAI Response: ' + data7.openai_response;
                     outerDiv.appendChild(innerDiv);
 
                     const targetElement = document.querySelector('.flex.flex-row.items-center.gap-3');
