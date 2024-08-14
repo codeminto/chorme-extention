@@ -1,95 +1,156 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@300;400&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiplex</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #303030;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 440px;
+            width: 350px;
+            border-radius: 10px;
+            margin: 0;
+        }
 
-    body {
-      font-family: 'Courier New', Courier, monospace;
-      background-color: #ffffff;
-      color: #000000;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      border: none;
-      box-shadow: none; 
-    }
-    .container {
-      width: 500px;
-      padding: 20px;
-      border: 1px solid #1F51FF;
-      border-radius: 0;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      background-color: #ffffff;
-    }
-    .header {
-      text-align: center;
-      border-bottom: 2px solid #1F51FF;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
-    }
-    .header h1 {
-      font-size: 2rem;
-      margin: 0;
-      color: #1F51FF;
-    }
-    .content {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .content h2 {
-      font-size: 1.5rem;
-      margin: 0;
-      color: #000000;
-    }
-    .content .light-font {
-      font-family: 'Courier Prime', 'Courier New', Courier, monospace;
-      font-weight: 300;
-      color: #1F51FF;
-    }
-    .footer {
-      text-align: center;
-    }
-    .footer h3 {
-      font-size: 1.25rem;
-      margin-bottom: 10px;
-      color: #000000;
-    }
-    .footer ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    .footer ul li {
-      background: rgba(31, 81, 255, 0.1);
-      margin: 5px 0;
-      padding: 10px;
-      border: 1px solid #1F51FF;
-      border-radius: 0;
-      text-align: center;
-      color: #1F51FF;
-    }
-  </style>
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 400px;
+        }
+
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            flex-grow: 1;
+            display: none;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .footer-icon {
+            font-size: 24px;
+            color: #777;
+            cursor: pointer;
+        }
+
+        .footer-icon.active {
+            color: #4CBEF9;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>**insAIght**</h1>
+    <div class="container">
+        <div class="header">Sentiplex</div>
+
+        <!-- Home Content -->
+        <div id="homeContent" class="content active">
+            <h3>Welcome to Sentiplex!</h3>
+            <p>Analyze social media posts and tweets for sentiment analysis. Use this tool to detect the sentiment of content and understand public opinion.</p>
+        </div>
+
+        <!-- Settings Content -->
+        <div id="settingsContent" class="content">
+            <h3>Settings</h3>
+        </div>
+
+        <!-- Files Content -->
+        <div id="filesContent" class="content">
+            <h3>Files</h3>
+        </div>
+
+        <!-- Profile Content -->
+        <div id="profileContent" class="content">
+            <h3>Profile</h3>
+        </div>
+
+        <div class="footer">
+            <span id="homeTab" class="footer-icon active">🏠
+                 <!-- Tweets Sentiment -->
+                </span>
+            <span id="settingsTab" class="footer-icon">⚙️ 
+                <!-- News -->
+            </span>
+            <span id="filesTab" class="footer-icon">📄
+                 <!-- Swap -->
+                </span>
+            <span id="profileTab" class="footer-icon">👤 
+                <!-- About -->
+            </span>
+        </div>
     </div>
-    <div class="content">
-      <h2>Made with &#x2764;&#xFE0F; at<br><span class="light-font">**dAGI House**</span></h2>
-    </div>
-    <div class="footer">
-      <h3>Powered by:</h3>
-      <ul>
-        <li><img src="/images/galadriel.png" height="25"></li>
-        <li><img src="/images/corcel.png" height="25"></li>
-        <li><img src="/images/mbd.png" height="25"></li>
-      </ul>
-    </div>
-  </div>
-  <script src="/scripts/popup.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // JavaScript to handle tab switching
+            const homeTab = document.getElementById('homeTab');
+            const settingsTab = document.getElementById('settingsTab');
+            const filesTab = document.getElementById('filesTab');
+            const profileTab = document.getElementById('profileTab');
+
+            const homeContent = document.getElementById('homeContent');
+            const settingsContent = document.getElementById('settingsContent');
+            const filesContent = document.getElementById('filesContent');
+            const profileContent = document.getElementById('profileContent');
+
+            // Event listeners for tab clicks
+            homeTab.addEventListener('click', () => {
+                setActiveTab(homeTab);
+                setActiveContent(homeContent);
+            });
+
+            settingsTab.addEventListener('click', () => {
+                setActiveTab(settingsTab);
+                setActiveContent(settingsContent);
+            });
+
+            filesTab.addEventListener('click', () => {
+                setActiveTab(filesTab);
+                setActiveContent(filesContent);
+            });
+
+            profileTab.addEventListener('click', () => {
+                setActiveTab(profileTab);
+                setActiveContent(profileContent);
+            });
+
+            function setActiveTab(tab) {
+                document.querySelectorAll('.footer-icon').forEach(icon => icon.classList.remove('active'));
+                tab.classList.add('active');
+            }
+
+            function setActiveContent(content) {
+                document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+                content.classList.add('active');
+            }
+        });
+    </script>
+
 </body>
 </html>
